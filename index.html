@@ -397,7 +397,7 @@ BOOK["15"].u = "福寿円満運"; BOOK["15"].l = "大";
 <script>
 (function () {
   const $ = (id) => document.getElementById(id);
-  const KEY = "kanteisho_hinagata";
+  const KEY = "kanteisho_hinagata"; /* 直し 11-13: 前に入れた名前・写真をこの携帯から1回だけ消す */ try { if (!localStorage.getItem("kanteisho_kesu_20261113")) { localStorage.removeItem(KEY); localStorage.removeItem(KEY + "_photo"); localStorage.setItem("kanteisho_kesu_20261113", "1"); try { sessionStorage.removeItem("uranaiGamen"); } catch (x) {} } } catch (e) {}
   const isAndroid = /Android/i.test(navigator.userAgent);
   const NOWD = new Date();
 
