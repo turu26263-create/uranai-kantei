@@ -999,11 +999,28 @@ if(/Android/i.test(navigator.userAgent)){
     let yurusu=!!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia);
     try{const fp=document.featurePolicy||document.permissionsPolicy;if(fp&&fp.allowsFeature&&!fp.allowsFeature('camera'))yurusu=false}catch(x){}
     e.preventDefault();
-    if(!yurusu){kameraMadoguchi();return}
+    if(!yurusu){window.kameraMadoguchi();return}
     kameraHiraku().catch(()=>{kameraTojiru();$('kameraAnnai').hidden=false;ireru('カメラを開けませんでした。「写真を選ぶ」を押すと、カメラか写真を選べます')});
   });
 }
 /* ここまで */
+})();
+</script>
+<script>
+/* カメラ共通(11-13): 全部のアプリで同じ。Claudeアプリの中で開いたら最初に「ブラウザで開く」を出す(アプリがカメラと自動の移動を止めているので1回押すだけにする)。
+   中でカメラを押した時も同じ窓を出す。ブラウザでは今まで通りページの中にカメラを映す */
+(function(){
+  const NAME="総合運勢鑑定書", SOTO="https://turu26263-create.github.io/uranai-kantei/", PICK="pickIn";
+  let waku=true;try{waku=window.top!==window}catch(x){}
+  let kameraNashi=false;try{const fp=document.featurePolicy||document.permissionsPolicy;if(fp&&fp.allowsFeature)kameraNashi=!fp.allowsFeature('camera')}catch(x){}
+  function mado(id,shita){
+    const o=document.createElement('div');o.id=id;
+    o.style.cssText='position:fixed;inset:0;z-index:2147483003;background:rgba(10,4,4,.94);display:flex;align-items:center;justify-content:center;padding:18px';
+    o.innerHTML='<div style="max-width:420px;width:100%;text-align:center;color:#fff3d3;font:16px system-ui,sans-serif;display:grid;gap:14px"><b style="font-size:22px">'+NAME+'</b><a href="'+SOTO+'" target="_blank" rel="noopener" style="display:block;padding:22px 12px;border-radius:16px;background:linear-gradient(135deg,#bf953f,#fcf6ba,#b38728);color:#2b1508;font-weight:800;font-size:22px;text-decoration:none">ブラウザで開いてカメラを使う</a><div style="font-size:14px;opacity:.85">Claudeアプリの中ではカメラが使えません。ブラウザで開いたら、メニューの「ホーム画面に追加」で次から直接開けます</div>'+shita+'</div>';
+    document.body.append(o);o.querySelectorAll('[data-tojiru]').forEach(b=>b.addEventListener('click',()=>setTimeout(()=>o.remove(),200)));return o}
+  window.kameraMadoguchi=function(){const m=document.getElementById('kameraMado2');if(m)m.remove();
+    mado('kameraMado2','<label for="'+PICK+'" data-tojiru style="display:block;padding:12px;border-radius:12px;border:1px solid #bf953f;cursor:pointer;font-size:17px">写真を選ぶ</label><button type="button" data-tojiru style="padding:10px;border-radius:12px;background:none;border:1px solid #777;color:#ccc;font-size:15px">とじる</button>')};
+  if(waku&&kameraNashi&&!document.getElementById('sotoHe'))mado('sotoHe','<button type="button" data-tojiru style="padding:10px;border-radius:12px;background:none;border:1px solid #777;color:#ccc;font-size:15px">このまま使う</button>');
 })();
 </script>
 </body></html>
