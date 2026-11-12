@@ -397,7 +397,7 @@ BOOK["15"].u = "福寿円満運"; BOOK["15"].l = "大";
 <script>
 (function () {
   const $ = (id) => document.getElementById(id);
-  const KEY = "kanteisho_hinagata"; /* 直し 11-13: 前に入れた名前・写真をこの携帯から1回だけ消す */ try { if (!localStorage.getItem("kanteisho_kesu_20261113")) { localStorage.removeItem(KEY); localStorage.removeItem(KEY + "_photo"); localStorage.setItem("kanteisho_kesu_20261113", "1"); try { sessionStorage.removeItem("uranaiGamen"); } catch (x) {} } } catch (e) {}
+  const KEY = "kanteisho_hinagata"; /* 直し 11-13: 名前・写真は携帯に残さない。開いている間だけ(読み直しても消えない)覚えて、閉じたら消える。前に残っていた分もここで消す */ try { localStorage.removeItem(KEY); localStorage.removeItem(KEY + "_photo"); localStorage.removeItem("kanteisho_kesu_20261113"); } catch (e) {}
   const isAndroid = /Android/i.test(navigator.userAgent);
   const NOWD = new Date();
 
@@ -421,7 +421,7 @@ BOOK["15"].u = "福寿円満運"; BOOK["15"].l = "大";
 
   // ── 上書き保存 ──
   const DEF = { sei: "", mei: "", kana: "", alias: "", sex: "", by: "", bm: "", bd: "", blood: "", tk: "0", th: "12", tm: "0", face: {}, suhi: "", psei: "", pmei: "", py: "", pm: "", pd: "", psex: "" };
-  function load() { try { return Object.assign({}, DEF, JSON.parse(localStorage.getItem(KEY) || "{}")); } catch (e) { return Object.assign({}, DEF); } }
+  function load() { try { return Object.assign({}, DEF, JSON.parse(sessionStorage.getItem(KEY) || "{}")); } catch (e) { return Object.assign({}, DEF); } }
   function readForm() {
     const q = (n) => { const r = document.querySelector(`input[name=${n}]:checked`); return r ? r.value : ""; };
     const face = {}; document.querySelectorAll("select[data-k]").forEach(s => { if (s.value) face[s.dataset.k] = s.value; });
@@ -437,11 +437,11 @@ BOOK["15"].u = "福寿円満運"; BOOK["15"].l = "大";
     $("by").value = S.by; $("bm").value = S.bm; $("bd").value = S.bd; $("th").value = S.th; $("tm").value = S.tm; $("suhiNum").value = S.suhi;
     document.querySelectorAll("select[data-k]").forEach(s => { s.value = S.face[s.dataset.k] || ""; });
   }
-  function save(S) { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+  function save(S) { try { sessionStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
 
   // ── 写真 ──
   let photoURL = null, photoBlob = null, sampleFn = null;
-  try { photoURL = localStorage.getItem(KEY + "_photo"); } catch (e) {}
+  try { photoURL = sessionStorage.getItem(KEY + "_photo"); } catch (e) {}
   function dataURLtoBlob(u) { try { const [h, d] = u.split(","); const bin = atob(d); const arr = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i); return new Blob([arr], { type: (h.match(/data:([^;]+)/) || [])[1] || "image/jpeg" }); } catch (e) { return null; } }
   if (photoURL) photoBlob = dataURLtoBlob(photoURL);
   function updateReadBtn() { $("readFace").hidden = !(sampleFn && photoBlob); }
@@ -501,7 +501,7 @@ BOOK["15"].u = "福寿円満運"; BOOK["15"].l = "大";
       const k2 = Math.min(1, 700 / Math.max(c.width, c.height));
       const c2 = document.createElement("canvas"); c2.width = Math.round(c.width * k2); c2.height = Math.round(c.height * k2);
       c2.getContext("2d").drawImage(c, 0, 0, c2.width, c2.height);
-      localStorage.setItem(KEY + "_photo", c2.toDataURL("image/jpeg", 0.85));
+      sessionStorage.setItem(KEY + "_photo", c2.toDataURL("image/jpeg", 0.85));
     } catch (e) {}
   }
   // 動きの記録（どこで止まったか見えるように）
@@ -529,7 +529,7 @@ BOOK["15"].u = "福寿円満運"; BOOK["15"].l = "大";
   $("pasteBox").addEventListener("paste", onPaste);
   $("pasteBox").addEventListener("input", () => { const im = $("pasteBox").querySelector("img"); if (im && im.src && im.src.startsWith("data:")) { const b = dataURLtoBlob(im.src); if (b) takeFile(b, "貼り付け"); } $("pasteBox").textContent = "ここを長押しして「貼り付け」でも写真を入れられます（写真をコピーしてから）"; });
   diag("準備できました（" + (isAndroid ? "Android" : /iPhone|iPad/.test(navigator.userAgent) ? "iPhone" : "パソコン") + "）");
-  $("clearPhoto").addEventListener("click", () => { photoURL = null; photoBlob = null; updateReadBtn(); showThumb(); $("camNote").textContent = isAndroid ? ANDROID_NOTE : ""; try { localStorage.removeItem(KEY + "_photo"); } catch (e) {} refreshSheet(); });
+  $("clearPhoto").addEventListener("click", () => { photoURL = null; photoBlob = null; updateReadBtn(); showThumb(); $("camNote").textContent = isAndroid ? ANDROID_NOTE : ""; try { sessionStorage.removeItem(KEY + "_photo"); } catch (e) {} refreshSheet(); });
 
   // ── 鑑定書の札（位置は 1024×1536 の画像の上）──
   const stage = $("stage"), wrap = $("wrap"), baseImg = $("base");
