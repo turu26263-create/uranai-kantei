@@ -1020,7 +1020,8 @@ if(/Android/i.test(navigator.userAgent)){
     document.body.append(o);o.querySelector('a').addEventListener('click',function(){try{const S=sessionStorage.getItem('kanteisho_hinagata');this.href=SOTO+(S?'#kantei='+encodeURIComponent(btoa(unescape(encodeURIComponent(S)))):'')}catch(x){}});o.querySelectorAll('[data-tojiru]').forEach(b=>b.addEventListener('click',()=>setTimeout(()=>o.remove(),200)));return o}
   window.kameraMadoguchi=function(){const m=document.getElementById('kameraMado2');if(m)m.remove();
     mado('kameraMado2','<label for="'+PICK+'" data-tojiru style="display:block;padding:12px;border-radius:12px;border:1px solid #bf953f;cursor:pointer;font-size:17px">写真を選ぶ</label><button type="button" data-tojiru style="padding:10px;border-radius:12px;background:none;border:1px solid #777;color:#ccc;font-size:15px">とじる</button>')};
-  if(waku&&kameraNashi&&!document.getElementById('sotoHe'))mado('sotoHe','');
+  /* 11-14: ボタンを押さずに、開いたらすぐブラウザへ飛ばす(アプリが止めた時はボタンが残る) */
+  if(waku&&kameraNashi&&!document.getElementById('sotoHe')){const g=mado('sotoHe','');setTimeout(()=>{try{g.querySelector('a').click()}catch(x){}},300)}
 })();
 </script>
 </body></html>
