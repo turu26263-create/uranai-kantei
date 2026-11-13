@@ -397,7 +397,7 @@ BOOK["15"].u = "福寿円満運"; BOOK["15"].l = "大";
 <script>
 (function () {
   const $ = (id) => document.getElementById(id);
-  const KEY = "kanteisho_hinagata"; /* 直し 11-13: 名前・写真は携帯に残さない。開いている間だけ(読み直しても消えない)覚えて、閉じたら消える。前に残っていた分もここで消す */ try { localStorage.removeItem(KEY); localStorage.removeItem(KEY + "_photo"); localStorage.removeItem("kanteisho_kesu_20261113"); } catch (e) {}
+  const KEY = "kanteisho_hinagata"; /* 直し 11-13: 名前・写真は携帯に残さない。開いている間だけ(読み直しても消えない)覚えて、閉じたら消える。前に残っていた分もここで消す */ try { localStorage.removeItem(KEY); localStorage.removeItem(KEY + "_photo"); localStorage.removeItem("kanteisho_kesu_20261113"); } catch (e) {} /* 直し 11-14: Claudeアプリの中から「ブラウザで開く」で来た時は、入れた内容を受け取ってすぐ鑑定書を出す。受け取ったらURLから消すので、開き直すと空から */ try { const h = location.hash; if (h.indexOf("#kantei=") === 0) { const j = decodeURIComponent(escape(atob(decodeURIComponent(h.slice(8))))); JSON.parse(j); sessionStorage.setItem(KEY, j); sessionStorage.setItem("uranaiGamen", "kantei"); } if (h) history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
   const isAndroid = /Android/i.test(navigator.userAgent);
   const NOWD = new Date();
 
@@ -1017,10 +1017,10 @@ if(/Android/i.test(navigator.userAgent)){
     const o=document.createElement('div');o.id=id;
     o.style.cssText='position:fixed;inset:0;z-index:2147483003;background:rgba(10,4,4,.94);display:flex;align-items:center;justify-content:center;padding:18px';
     o.innerHTML='<div style="max-width:420px;width:100%;text-align:center;color:#fff3d3;font:16px system-ui,sans-serif;display:grid;gap:14px"><b style="font-size:22px">'+NAME+'</b><a href="'+SOTO+'" target="_blank" rel="noopener" style="display:block;padding:22px 12px;border-radius:16px;background:linear-gradient(135deg,#bf953f,#fcf6ba,#b38728);color:#2b1508;font-weight:800;font-size:22px;text-decoration:none">ブラウザで開いてカメラを使う</a><div style="font-size:14px;opacity:.85">Claudeアプリの中ではカメラが使えません。ブラウザで開いたら、メニューの「ホーム画面に追加」で次から直接開けます</div>'+shita+'</div>';
-    document.body.append(o);o.querySelectorAll('[data-tojiru]').forEach(b=>b.addEventListener('click',()=>setTimeout(()=>o.remove(),200)));return o}
+    document.body.append(o);o.querySelector('a').addEventListener('click',function(){try{const S=sessionStorage.getItem('kanteisho_hinagata');this.href=SOTO+(S?'#kantei='+encodeURIComponent(btoa(unescape(encodeURIComponent(S)))):'')}catch(x){}});o.querySelectorAll('[data-tojiru]').forEach(b=>b.addEventListener('click',()=>setTimeout(()=>o.remove(),200)));return o}
   window.kameraMadoguchi=function(){const m=document.getElementById('kameraMado2');if(m)m.remove();
     mado('kameraMado2','<label for="'+PICK+'" data-tojiru style="display:block;padding:12px;border-radius:12px;border:1px solid #bf953f;cursor:pointer;font-size:17px">写真を選ぶ</label><button type="button" data-tojiru style="padding:10px;border-radius:12px;background:none;border:1px solid #777;color:#ccc;font-size:15px">とじる</button>')};
-  if(waku&&kameraNashi&&!document.getElementById('sotoHe'))mado('sotoHe','<button type="button" data-tojiru style="padding:10px;border-radius:12px;background:none;border:1px solid #777;color:#ccc;font-size:15px">このまま使う</button>');
+  if(waku&&kameraNashi&&!document.getElementById('sotoHe'))mado('sotoHe','');
 })();
 </script>
 </body></html>
