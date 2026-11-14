@@ -1039,7 +1039,7 @@ if(/Android/i.test(navigator.userAgent)){
   let kakure=0;
   document.addEventListener("visibilitychange",()=>{
     if(document.hidden){kakure=Date.now();return}
-    if(!kakure||Date.now()-kakure<120000) return;
+    if(!kakure||Date.now()-kakure<3000) return; /* 直し 11-14d: 2分待ちをやめ、3秒以上裏に置いて前に出したら空から開き直す(カメラに行っている間は除く) */
     try{const k=Number(sessionStorage.getItem("kameraIku")||0); if(k&&Date.now()-k<600000) return;
       sessionStorage.removeItem(KEY);sessionStorage.removeItem(KEY+"_photo");sessionStorage.removeItem("uranaiGamen");sessionStorage.removeItem("kameraIku");}catch(e){}
     location.reload();
