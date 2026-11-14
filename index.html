@@ -1021,7 +1021,7 @@ if(/Android/i.test(navigator.userAgent)){
   window.kameraMadoguchi=function(){const m=document.getElementById('kameraMado2');if(m)m.remove();
     mado('kameraMado2','<label for="'+PICK+'" data-tojiru style="display:block;padding:12px;border-radius:12px;border:1px solid #bf953f;cursor:pointer;font-size:17px">写真を選ぶ</label><button type="button" data-tojiru style="padding:10px;border-radius:12px;background:none;border:1px solid #777;color:#ccc;font-size:15px">とじる</button>')};
   /* 11-14: ボタンを押さずに、開いたらすぐブラウザへ飛ばす(アプリが止めた時はボタンが残る) */
-  if(waku&&kameraNashi&&!document.getElementById('sotoHe')){const g=mado('sotoHe','');setTimeout(()=>{try{g.querySelector('a').click()}catch(x){}},300)}
+  /* 11-14c: 窓もボタンも出さず、開いたら直にブラウザへ飛ぶ(名前は渡さない) */ if(waku&&kameraNashi){let w=null;try{w=window.open(SOTO,'_blank','noopener')}catch(x){} if(!w){try{window.top.location.href=SOTO}catch(x){try{location.href=SOTO}catch(y){}}}}
 })();
 </script>
 <script>
